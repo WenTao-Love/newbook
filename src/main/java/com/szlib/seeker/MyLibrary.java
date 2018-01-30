@@ -1,5 +1,7 @@
 package com.szlib.seeker;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -29,8 +31,14 @@ public class MyLibrary {
 		String referer = "https://www.szlib.org.cn/page/newbook.html";
 		String connection = "keep-alive";
 		String accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+		
+		String proxyHost = "110.120.119.114";
+		int proxyPort = 8081;
+		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+		
 		String result = HttpRequest.get(url).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
 				.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
+				.setProxy(proxy)
 				.execute().body();
 
 		String ajaxUrl = "proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&library=044005&local=2Z&catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&_={}";
@@ -42,7 +50,9 @@ public class MyLibrary {
 		String x_requested_with = "XMLHttpRequest";
 		result = HttpRequest.get(url).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
 				.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
-				.header("X-Requested-With", x_requested_with).execute().body();
+				.header("X-Requested-With", x_requested_with)
+				.setProxy(proxy)
+				.execute().body();
 //		System.out.println(result);
 
 		JSONObject resultJson = JSONUtil.parseObj(result);
@@ -57,7 +67,9 @@ public class MyLibrary {
 			url = baseUrl + ajaxUrl_format;
 			result = HttpRequest.get(url).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
 					.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
-					.header("X-Requested-With", x_requested_with).execute().body();
+					.header("X-Requested-With", x_requested_with)
+					.setProxy(proxy)
+					.execute().body();
 			resultJson = JSONUtil.parseObj(result);
 			resultArray = resultJson.getJSONArray("result");
 			newBooks.addAll(json2NewBook(resultArray));
