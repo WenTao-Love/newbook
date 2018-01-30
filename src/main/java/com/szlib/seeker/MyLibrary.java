@@ -32,7 +32,7 @@ public class MyLibrary {
 		String connection = "keep-alive";
 		String accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
 		
-		String proxyHost = "110.120.119.114";
+		String proxyHost = "110.119.120.114";
 		int proxyPort = 8081;
 		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
 		
@@ -144,7 +144,7 @@ public class MyLibrary {
 			newBook.setOrdcatamid(ordcatamid);
 			
 			//我优先关注出版年份晚于2017的
-			if(DateUtil.year(pdate)>2017) {
+			if(DateUtil.year(pdate)>=2017) {
 				String checkUrl_format = StrUtil.format(checkUrl, biblisomtableid,biblisommetaid,ordcatamid);
 				String readerAccessUrl_format = StrUtil.format(readerAccessUrl, biblisomtableid,biblisommetaid,ordcatamid);
 				newBook.setCheckUrl(checkUrl_format);
