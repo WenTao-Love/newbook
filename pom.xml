@@ -7,7 +7,8 @@
 	<name>newbook</name>
 	<description>深圳图书馆新书直通车数据采集</description>
 	<properties>
-		<hutool.version>4.0.2</hutool.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<hutool.version>4.0.3</hutool.version>
 	</properties>
 	<dependencies>
 		<dependency>

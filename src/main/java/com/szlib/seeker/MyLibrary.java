@@ -67,6 +67,7 @@ public class MyLibrary {
 		newBooks.sort(comparator.reversed());
 		String today= DateUtil.today();
 		FileWriter writer = new FileWriter(today+"深图新书选购目录.txt");
+		
 		newBooks.forEach(o->{
 			List<String> lines = new ArrayList<>();
 			lines.add("标题:"+o.getTitle());
@@ -74,8 +75,9 @@ public class MyLibrary {
 			lines.add("价格:"+o.getPrice());
 			lines.add("出版者:"+o.getPublisher_name());
 			lines.add("出版年:"+o.getPublisher_date());
-			lines.add("简介:"+o.getAbstract_self());
-//			lines.add("\n");
+			lines.add("简介:"+o.getAbstract_self());	
+			lines.add("能否可借:"+o.getCheckUrl());
+			lines.add("读者自取:"+o.getReaderAccessUrl());
 			writer.appendLines(lines);
 		});
 	}
@@ -83,6 +85,11 @@ public class MyLibrary {
 	private static List<NewBook> json2NewBook(JSONArray resultArray){
 		List<NewBook> newBooks = new ArrayList<NewBook>();
 		String format = "yyyy.MM";
+		String baseUrl = "https://www.szlib.org.cn/MyLibrary/";
+		String checkUrl = baseUrl + "proxyBasic.jsp?requestmanage/recommendCheck?linkmetatable={}&linkmetaid={}&library=044005&local=2Z&bookrecordno={}";
+		String readerAccessUrl = baseUrl + "Reader-Access.jsp?destPage=ReserveSubmit.jsp?v_Tableid={}&v_recno={}&doclibrary=044005&local=2Z&bookrecordno={}";
+		String addExpressUrl = baseUrl + "Reader-Access.jsp?destPage=newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&local=2Z&library=044005";
+		
 		for (int i = 0, size = resultArray.size(); i < size; i++) {
 			JSONObject book = resultArray.getJSONObject(i);
 			NewBook newBook = new NewBook();
@@ -93,6 +100,10 @@ public class MyLibrary {
 			String abstract_ = book.getStr("abstract");
 			String isbn = book.getStr("isbn");
 			String price = book.getStr("price");
+			
+			String biblisomtableid = book.getStr("biblisomtableid");
+			String biblisommetaid = book.getStr("biblisommetaid");
+			String ordcatamid = book.getStr("ordcatamid");
 			
 			newBook.setTitle(title);
 			newBook.setAuthor(author);
@@ -107,7 +118,7 @@ public class MyLibrary {
 				 pdate = DateUtil.parse(publisher_spilt[1], format);				
 			}catch (Exception e) {
 //				log.error(publisher_spilt[1],e);
-				System.out.println(publisher_spilt[1]);
+				System.err.println(publisher_spilt[1]);
 				e.printStackTrace();
 				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], new char[] {'[',']'}, "");
 				pdate = DateUtil.parse(publisher_spilt_1, "yyyy");
@@ -115,6 +126,21 @@ public class MyLibrary {
 			
 			newBook.setPublisher_time(pdate);
 			newBook.setPrice(price);
+			
+			newBook.setBiblisomtableid(biblisomtableid);
+			newBook.setBiblisommetaid(biblisommetaid);
+			newBook.setOrdcatamid(ordcatamid);
+			
+			//我优先关注出版年份晚于2017的
+			if(DateUtil.year(pdate)>2017) {
+				String checkUrl_format = StrUtil.format(checkUrl, biblisomtableid,biblisommetaid,ordcatamid);
+				String readerAccessUrl_format = StrUtil.format(readerAccessUrl, biblisomtableid,biblisommetaid,ordcatamid);
+				newBook.setCheckUrl(checkUrl_format);
+				newBook.setReaderAccessUrl(readerAccessUrl_format);
+				newBook.setAddExpressUrl(addExpressUrl);
+			}
+			
+			
 			newBooks.add(newBook);
 		}
 		return newBooks;

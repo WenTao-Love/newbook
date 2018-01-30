@@ -3,6 +3,10 @@ package com.szlib.seeker;
 import java.util.Date;
 
 public class NewBook {
+	private String biblisomtableid;
+	private String biblisommetaid;
+	private String ordcatamid;
+	
 	private String title;
 	private String author;
 	private String publisher_name;
@@ -11,6 +15,10 @@ public class NewBook {
 	private String abstract_self;
 	private String isbn;
 	private String price;
+	
+	private String checkUrl;
+	private String readerAccessUrl;
+	private String addExpressUrl;
 
 	public String getTitle() {
 		return title;
@@ -75,4 +83,53 @@ public class NewBook {
 	public void setPublisher_time(Date publisher_time) {
 		this.publisher_time = publisher_time;
 	}
+
+	public String getBiblisomtableid() {
+		return biblisomtableid;
+	}
+
+	public void setBiblisomtableid(String biblisomtableid) {
+		this.biblisomtableid = biblisomtableid;
+	}
+
+	public String getBiblisommetaid() {
+		return biblisommetaid;
+	}
+
+	public void setBiblisommetaid(String biblisommetaid) {
+		this.biblisommetaid = biblisommetaid;
+	}
+
+	public String getOrdcatamid() {
+		return ordcatamid;
+	}
+
+	public void setOrdcatamid(String ordcatamid) {
+		this.ordcatamid = ordcatamid;
+	}
+
+	public String getCheckUrl() {
+		return checkUrl;
+	}
+
+	public void setCheckUrl(String checkUrl) {
+		this.checkUrl = checkUrl;
+	}
+
+	public String getReaderAccessUrl() {
+		return readerAccessUrl;
+	}
+
+	public void setReaderAccessUrl(String readerAccessUrl) {
+		this.readerAccessUrl = readerAccessUrl;
+	}
+
+	public String getAddExpressUrl() {
+		return addExpressUrl;
+	}
+
+	public void setAddExpressUrl(String addExpressUrl) {
+		this.addExpressUrl = addExpressUrl;
+	}
+	
 }
