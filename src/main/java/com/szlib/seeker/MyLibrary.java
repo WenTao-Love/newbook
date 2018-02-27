@@ -24,7 +24,7 @@ import cn.hutool.log.LogFactory;
 public class MyLibrary {
 	// private static final Log log = LogFactory.get();
 	public static void main(String[] args) {
-		String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.19 Safari/537.36";
+		String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3350.0 Safari/537.36";
 		String baseUrl = "https://www.szlib.org.cn/MyLibrary/";
 		String url = "https://www.szlib.org.cn/MyLibrary/newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&library=044005&local=2Z#";
 		String host = "www.szlib.org.cn";
@@ -86,6 +86,7 @@ public class MyLibrary {
 			lines.add("简介:" + o.getAbstract_self());
 			lines.add("能否可借:" + o.getCheckUrl());
 			lines.add("读者自取:" + o.getReaderAccessUrl());
+			lines.add("\n");
 			writer.appendLines(lines);
 		});
 	}

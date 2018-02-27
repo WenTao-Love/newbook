@@ -8,7 +8,7 @@
 	<description>深圳图书馆新书直通车数据采集</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<hutool.version>4.0.3</hutool.version>
+		<hutool.version>4.0.5</hutool.version>
 	</properties>
 	<dependencies>
 		<dependency>
