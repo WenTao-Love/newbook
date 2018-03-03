@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.szlib</groupId>
 	<artifactId>newbook</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>newbook</name>
 	<description>深圳图书馆新书直通车数据采集</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<hutool.version>4.0.5</hutool.version>
+		<hutool.version>4.0.6</hutool.version>
 	</properties>
 	<dependencies>
 		<dependency>

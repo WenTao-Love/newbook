@@ -5,6 +5,7 @@ import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
@@ -20,35 +21,48 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
+import cn.hutool.setting.Setting;
 
 public class MyLibrary {
-	// private static final Log log = LogFactory.get();
+	private static final Log log = LogFactory.get();
+	private static Setting setting = new Setting("project.setting", true);
+	
 	public static void main(String[] args) {
-		String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3350.0 Safari/537.36";
-		String baseUrl = "https://www.szlib.org.cn/MyLibrary/";
-		String url = "https://www.szlib.org.cn/MyLibrary/newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&library=044005&local=2Z#";
-		String host = "www.szlib.org.cn";
-		String referer = "https://www.szlib.org.cn/page/newbook.html";
-		String connection = "keep-alive";
-		String accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+		Objects.requireNonNull(setting, "配置不能为空");
+		Setting header = setting.getSetting("header");
+		
+		String userAgent = header.getStrings("userAgent")[RandomUtil.randomInt(0, 1)];
+//		String baseUrl = setting.getStr("baseUrl");
+		String url = setting.getStr("initUrl");
+		String host = header.getStr("host");
+		
+		String[] referers = header.getStrings("referer");
+		String referer = referers[0];
+		String connection = header.getStr("keep-alive");
+		String accept = header.getStr("accept");
 
-		String proxyHost = "110.119.120.114";
-		int proxyPort = 8081;
-		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+		Setting proxySetting = setting.getSetting("proxy");
+		Proxy proxy= null;
+		boolean enable = proxySetting.getBool("enable");
+		if(enable) {
+			String proxyHost = proxySetting.getStr("host");
+			int proxyPort = proxySetting.getInt("port");
+			proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+		}
 
-		proxy = null;
 		String result = buildRequest(url,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
 				.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
 				.execute().body();
 
-		String ajaxUrl = "proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&library=044005&local=2Z&catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&_={}";
-		referer = "https://www.szlib.org.cn/MyLibrary/newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&library=044005&local=2Z";
+		String ajaxUrl = setting.getStr("ajaxUrl");
+		referer = referers[1];
 		long current = DateUtil.current(false);
 		String ajaxUrl_format = StrUtil.format(ajaxUrl, 1, current);
-		url = baseUrl + ajaxUrl_format;
-		accept = "application/json, text/javascript, */*";
-		String x_requested_with = "XMLHttpRequest";
-		result = buildRequest(url,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
+		
+		accept = header.getStr("accept-json");
+		String x_requested_with = header.getStr("x_requested_with");
+		
+		result = buildRequest(ajaxUrl_format,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
 				.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
 				.header("X-Requested-With", x_requested_with).execute().body();
 		// System.out.println(result);
@@ -56,27 +70,32 @@ public class MyLibrary {
 		JSONObject resultJson = JSONUtil.parseObj(result);
 		int totalno = resultJson.getInt("totalno");
 		int totalPage = PageUtil.totalPage(totalno, 10);
+		
 		JSONArray resultArray = resultJson.getJSONArray("result");
 		List<NewBook> newBooks = json2NewBook(resultArray);
 
 		for (int i = 2; i < totalPage; i++) {
 			current = DateUtil.current(false);
 			ajaxUrl_format = StrUtil.format(ajaxUrl, i, current);
-			url = baseUrl + ajaxUrl_format;
-			result = buildRequest(url,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
+			result = buildRequest(ajaxUrl_format,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
 					.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
 					.header("X-Requested-With", x_requested_with).execute().body();
 			resultJson = JSONUtil.parseObj(result);
 			resultArray = resultJson.getJSONArray("result");
 			newBooks.addAll(json2NewBook(resultArray));
-			ThreadUtil.safeSleep(RandomUtil.randomInt(1210, 2018));
+			ThreadUtil.safeSleep(RandomUtil.randomInt(1234, 2018));
 		}
 		Comparator<NewBook> comparator = (b1, b2) -> b1.getPublisher_time().compareTo(b2.getPublisher_time());
 		newBooks.sort(comparator.reversed());
 		String today = DateUtil.today();
-		FileWriter writer = new FileWriter(today + "深图新书选购目录.txt");
+		int caredYear = 2017;//重点关注的年份
+		String fileName = today + "深图新书选购目录.txt";
+		if(caredYear > 0) {
+			fileName = today + "深图"+caredYear+"年后出版新书选购目录.txt";
+		}
+		FileWriter writer = new FileWriter(fileName);
 
-		newBooks.forEach(o -> {
+		newBooks.stream().filter(o->DateUtil.year(o.getPublisher_time()) >=caredYear).forEach(o->{
 			List<String> lines = new ArrayList<>();
 			lines.add("标题:" + o.getTitle());
 			lines.add("作者:" + o.getAuthor());
@@ -89,6 +108,19 @@ public class MyLibrary {
 			lines.add("\n");
 			writer.appendLines(lines);
 		});
+//		newBooks.forEach(o -> {
+//			List<String> lines = new ArrayList<>();
+//			lines.add("标题:" + o.getTitle());
+//			lines.add("作者:" + o.getAuthor());
+//			lines.add("价格:" + o.getPrice());
+//			lines.add("出版者:" + o.getPublisher_name());
+//			lines.add("出版年:" + o.getPublisher_date());
+//			lines.add("简介:" + o.getAbstract_self());
+//			lines.add("能否可借:" + o.getCheckUrl());
+//			lines.add("读者自取:" + o.getReaderAccessUrl());
+//			lines.add("\n");
+//			writer.appendLines(lines);
+//		});
 	}
 
 	private static HttpRequest buildRequest(String url, Proxy proxy) {
@@ -102,13 +134,9 @@ public class MyLibrary {
 	private static List<NewBook> json2NewBook(JSONArray resultArray) {
 		List<NewBook> newBooks = new ArrayList<NewBook>();
 		String format = "yyyy.MM";
-		String baseUrl = "https://www.szlib.org.cn/MyLibrary/";
-		String checkUrl = baseUrl
-				+ "proxyBasic.jsp?requestmanage/recommendCheck?linkmetatable={}&linkmetaid={}&library=044005&local=2Z&bookrecordno={}";
-		String readerAccessUrl = baseUrl
-				+ "Reader-Access.jsp?destPage=ReserveSubmit.jsp?v_Tableid={}&v_recno={}&doclibrary=044005&local=2Z&bookrecordno={}";
-		String addExpressUrl = baseUrl
-				+ "Reader-Access.jsp?destPage=newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&local=2Z&library=044005";
+		String checkUrl = setting.getStr("checkUrl");
+		String readerAccessUrl = setting.getStr("readerAccessUrl");
+		String addExpressUrl = setting.getStr("addExpressUrl");
 
 		for (int i = 0, size = resultArray.size(); i < size; i++) {
 			JSONObject book = resultArray.getJSONObject(i);
@@ -137,8 +165,8 @@ public class MyLibrary {
 				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], new char[] { '/' }, ".");
 				pdate = DateUtil.parse(publisher_spilt[1], format);
 			} catch (Exception e) {
-				// log.error(publisher_spilt[1],e);
-				System.err.println(publisher_spilt[1]);
+				 log.error(publisher_spilt[1],e);
+//				System.err.println(publisher_spilt[1]);
 				e.printStackTrace();
 				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], new char[] { '[', ']' }, "");
 				pdate = DateUtil.parse(publisher_spilt_1, "yyyy");
