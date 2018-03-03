@@ -8,6 +8,10 @@
 	<description>深圳图书馆新书直通车数据采集</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>  
+        <maven.compiler.target>1.8</maven.compiler.target>  
+        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>  
 		<hutool.version>4.0.6</hutool.version>
 	</properties>
 	<dependencies>

@@ -74,6 +74,8 @@ public class MyLibrary {
 		JSONArray resultArray = resultJson.getJSONArray("result");
 		List<NewBook> newBooks = json2NewBook(resultArray);
 
+		int currentYear = DateUtil.thisYear();
+		int randomStart = RandomUtil.randomInt(1000, currentYear-432);
 		for (int i = 2; i < totalPage; i++) {
 			current = DateUtil.current(false);
 			ajaxUrl_format = StrUtil.format(ajaxUrl, i, current);
@@ -83,7 +85,7 @@ public class MyLibrary {
 			resultJson = JSONUtil.parseObj(result);
 			resultArray = resultJson.getJSONArray("result");
 			newBooks.addAll(json2NewBook(resultArray));
-			ThreadUtil.safeSleep(RandomUtil.randomInt(1234, 2018));
+			ThreadUtil.safeSleep(RandomUtil.randomInt(randomStart, currentYear));
 		}
 		Comparator<NewBook> comparator = (b1, b2) -> b1.getPublisher_time().compareTo(b2.getPublisher_time());
 		newBooks.sort(comparator.reversed());
