@@ -10,7 +10,7 @@ addExpressUrl=Reader-Access.jsp?destPage=newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%
 
 #请求头
 [header]
-userAgent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3355.4 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0
+userAgent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3386.1 Safari/537.36,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0
 host=www.szlib.org.cn
 referer=https://www.szlib.org.cn/page/newbook.html,https://www.szlib.org.cn/MyLibrary/newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&library=044005&local=2Z
 connection=keep-alive

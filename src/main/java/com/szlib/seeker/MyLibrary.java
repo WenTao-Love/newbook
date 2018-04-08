@@ -90,7 +90,7 @@ public class MyLibrary {
 		Comparator<NewBook> comparator = (b1, b2) -> b1.getPublisher_time().compareTo(b2.getPublisher_time());
 		newBooks.sort(comparator.reversed());
 		String today = DateUtil.today();
-		int caredYear = 2017;//重点关注的年份
+		int caredYear = 2018;//重点关注的年份
 		String fileName = today + "深图新书选购目录.txt";
 		if(caredYear > 0) {
 			fileName = today + "深图"+caredYear+"年后出版新书选购目录.txt";

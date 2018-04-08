@@ -20,6 +20,12 @@
 			<artifactId>hutool-all</artifactId>
 			<version>${hutool.version}</version>
 		</dependency>
+		<!-- fix jdk10 Caused by: java.lang.ClassNotFoundException: javax.activation.DataSource-->
+		<dependency>
+		    <groupId>javax.activation</groupId>
+		    <artifactId>activation</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
