@@ -182,7 +182,7 @@ public class MyLibrary {
 			newBook.setOrdcatamid(ordcatamid);
 
 			// 我优先关注出版年份晚于2017的
-			if (DateUtil.year(pdate) >= 2017) {
+			if (DateUtil.year(pdate) >= 2018) {
 				String checkUrl_format = StrUtil.format(checkUrl, biblisomtableid, biblisommetaid, ordcatamid);
 				String readerAccessUrl_format = StrUtil.format(readerAccessUrl, biblisomtableid, biblisommetaid,
 						ordcatamid);
