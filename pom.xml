@@ -12,7 +12,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>  
         <maven.compiler.target>1.8</maven.compiler.target>  
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>  
-		<hutool.version>4.0.11</hutool.version>
+		<hutool.version>4.0.12</hutool.version>
 	</properties>
 	<dependencies>
 		<dependency>
