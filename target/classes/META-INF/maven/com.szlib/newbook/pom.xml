@@ -13,6 +13,10 @@
         <maven.compiler.target>1.8</maven.compiler.target>  
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>  
 		<hutool.version>4.0.12</hutool.version>
+		<dubbo.version>2.6.1</dubbo.version>
+		<jsoup.version>1.11.3</jsoup.version>
+		<spring.version>5.0.6.RELEASE</spring.version>
+		<curator-client.version>4.0.1</curator-client.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -29,7 +33,20 @@
 		<dependency>
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
-		    <version>1.11.2</version>
+		    <version>${jsoup.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>dubbo</artifactId>
+		    <version>${dubbo.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.curator</groupId>
+		    <artifactId>curator-client</artifactId>
+		    <version>${curator-client.version}</version>
+		    <scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
