@@ -17,6 +17,7 @@
 		<jsoup.version>1.11.3</jsoup.version>
 		<spring.version>5.0.6.RELEASE</spring.version>
 		<curator-client.version>4.0.1</curator-client.version>
+		<drools.version>7.7.0.Final</drools.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -41,6 +42,12 @@
 		    <artifactId>dubbo</artifactId>
 		    <version>${dubbo.version}</version>
 		    <scope>test</scope>
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>org.jboss.netty</groupId>
+		    		<artifactId>netty</artifactId>
+		    	</exclusion>
+		    </exclusions>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.curator</groupId>
@@ -54,6 +61,13 @@
 		    <version>${curator-client.version}</version>
 		    <scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.kie</groupId>
+		    <artifactId>kie-spring</artifactId>
+		    <version>${drools.version}</version>
+		    <scope>runtime</scope>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>
