@@ -12,10 +12,10 @@
 		<maven.compiler.source>1.8</maven.compiler.source>  
         <maven.compiler.target>1.8</maven.compiler.target>  
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>  
-		<hutool.version>4.0.12</hutool.version>
+		<hutool.version>4.1.1</hutool.version>
 		<dubbo.version>2.6.1</dubbo.version>
 		<jsoup.version>1.11.3</jsoup.version>
-		<spring.version>5.0.6.RELEASE</spring.version>
+		<spring.version>5.0.7.RELEASE</spring.version>
 		<curator-client.version>4.0.1</curator-client.version>
 		<drools.version>7.7.0.Final</drools.version>
 	</properties>
