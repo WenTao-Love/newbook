@@ -139,7 +139,9 @@ public class MyLibrary {
 		String checkUrl = setting.getStr("checkUrl");
 		String readerAccessUrl = setting.getStr("readerAccessUrl");
 		String addExpressUrl = setting.getStr("addExpressUrl");
-
+		
+		char[] slash = new char[] { '/' };
+		char[]  brackets = new char[] { '[', ']' };
 		for (int i = 0, size = resultArray.size(); i < size; i++) {
 			JSONObject book = resultArray.getJSONObject(i);
 			NewBook newBook = new NewBook();
@@ -164,13 +166,13 @@ public class MyLibrary {
 			DateTime pdate = null;
 			String publisher_spilt_1 = null;
 			try {
-				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], new char[] { '/' }, ".");
+				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], slash, ".");
 				pdate = DateUtil.parse(publisher_spilt[1], format);
 			} catch (Exception e) {
-				 log.error(publisher_spilt[1],e);
+//				 log.error(publisher_spilt[1],e);
 //				System.err.println(publisher_spilt[1]);
 				e.printStackTrace();
-				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], new char[] { '[', ']' }, "");
+				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], brackets, "");
 				pdate = DateUtil.parse(publisher_spilt_1, "yyyy");
 			}
 
@@ -182,7 +184,7 @@ public class MyLibrary {
 			newBook.setOrdcatamid(ordcatamid);
 
 			// 我优先关注出版年份晚于2017的
-			if (DateUtil.year(pdate) >= 2018 && DateUtil.month(pdate) > 3) {
+			if (DateUtil.year(pdate) >= 2018 && DateUtil.month(pdate) > 5) {
 				String checkUrl_format = StrUtil.format(checkUrl, biblisomtableid, biblisommetaid, ordcatamid);
 				String readerAccessUrl_format = StrUtil.format(readerAccessUrl, biblisomtableid, biblisommetaid,
 						ordcatamid);
