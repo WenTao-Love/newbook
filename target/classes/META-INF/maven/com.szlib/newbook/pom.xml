@@ -12,12 +12,13 @@
 		<maven.compiler.source>1.8</maven.compiler.source>  
         <maven.compiler.target>1.8</maven.compiler.target>  
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>  
-		<hutool.version>4.1.2</hutool.version>
+		<hutool.version>4.1.4</hutool.version>
 		<dubbo.version>2.6.1</dubbo.version>
 		<jsoup.version>1.11.3</jsoup.version>
 		<spring.version>5.0.7.RELEASE</spring.version>
 		<curator-client.version>4.0.1</curator-client.version>
 		<drools.version>7.7.0.Final</drools.version>
+		<poi.version>3.17</poi.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -25,6 +26,12 @@
 			<artifactId>hutool-all</artifactId>
 			<version>${hutool.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>${poi.version}</version>
+		</dependency>
+		
 		<!-- fix jdk10 Caused by: java.lang.ClassNotFoundException: javax.activation.DataSource-->
 		<dependency>
 		    <groupId>javax.activation</groupId>
