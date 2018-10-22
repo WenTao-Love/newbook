@@ -28,8 +28,13 @@ public class Test {
 //		FileWriter writer = new FileWriter(file);
 //		writer.write("test");
 		
-		DateTime dt = DateUtil.parseDate("2018-03-05");
-		DateTime at = DateUtil.offsetDay(dt, 90);
-		System.out.println(at);
+//		DateTime dt = DateUtil.parseDate("2018-03-05");
+//		DateTime at = DateUtil.offsetDay(dt, 90);
+//		System.out.println(at);
+		
+		StringBuffer sb = new StringBuffer();
+		for(int i=0;i<10;i++) {
+			sb.append("第").append(i).append("次");
+		}
 	}
 }
