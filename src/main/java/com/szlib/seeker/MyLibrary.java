@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,7 +57,8 @@ public class MyLibrary {
 
 		String ajaxUrl = setting.getStr("ajaxUrl");
 		referer = referers[1];
-		long current = DateUtil.current(false);
+//		long current = DateUtil.current(false);
+		long current = DateUtil.current();
 		String ajaxUrl_format = StrUtil.format(ajaxUrl, 1, current);
 		
 		accept = header.getStr("accept-json");
@@ -65,7 +67,7 @@ public class MyLibrary {
 		result = buildRequest(ajaxUrl_format,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
 				.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
 				.header("X-Requested-With", x_requested_with).execute().body();
-		// System.out.println(result);
+		 System.out.println(result);
 
 		JSONObject resultJson = JSONUtil.parseObj(result);
 		int totalno = resultJson.getInt("totalno");
@@ -77,7 +79,8 @@ public class MyLibrary {
 		int currentYear = DateUtil.thisYear();
 		int randomStart = RandomUtil.randomInt(1000, currentYear-432);
 		for (int i = 2; i < totalPage; i++) {
-			current = DateUtil.current(false);
+//			current = DateUtil.current(false);
+			current = DateUtil.current();
 			ajaxUrl_format = StrUtil.format(ajaxUrl, i, current);
 			result = buildRequest(ajaxUrl_format,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
 					.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
@@ -90,7 +93,7 @@ public class MyLibrary {
 		Comparator<NewBook> comparator = (b1, b2) -> b1.getPublisher_time().compareTo(b2.getPublisher_time());
 		newBooks.sort(comparator.reversed());
 		String today = DateUtil.today();
-		int caredYear = 2018;//重点关注的年份
+		int caredYear = DateUtil.year(new Date());//重点关注的年份
 		String fileName = today + "深图新书选购目录.txt";
 		if(caredYear > 0) {
 			fileName = today + "深图"+caredYear+"年后出版新书选购目录.txt";

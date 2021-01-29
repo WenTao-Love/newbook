@@ -17,7 +17,7 @@
 		<jsoup.version>1.13.1</jsoup.version>
 		<spring.version>5.3.3.RELEASE</spring.version>
 		<curator-client.version>5.1.0</curator-client.version>
-		<drools.version>7.49.0.t20210118</drools.version>
+		<drools.version>7.48.0.Final</drools.version>
 		<guava.version>30.1-jre</guava.version>
 		<poi.version>5.0.0</poi.version>
 	</properties>
@@ -151,7 +151,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.9.0</version>
+				<version>3.8.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
