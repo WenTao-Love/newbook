@@ -1,6 +1,8 @@
 baseUrl=https://www.szlib.org.cn/MyLibrary/
 initUrl=${baseUrl}newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&library=044005&local=2Z
-ajaxUrl=${baseUrl}proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&v_index=&v_value=&flag=true&library=044005&local=2Z&catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&_={}
+ajaxUrl=${baseUrl}proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&v_index=&v_value=&flag=true&library=044005&local=2Z&catname=深图新书选购目录&_={}
+#ajaxUrl=${baseUrl}proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&v_index=&v_value=&flag=true&library=044005&local=2Z&catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&_={}
+
 #ajaxUrl=${baseUrl}proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&library=044005&local=2Z&catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&_={}
 #检查是否可借
 checkUrl=${baseUrl}proxyBasic.jsp?requestmanage/recommendCheck?linkmetatable={}&linkmetaid={}&library=044005&local=2Z&bookrecordno={}
@@ -11,12 +13,12 @@ addExpressUrl=Reader-Access.jsp?destPage=newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%
 
 #请求头
 [header]
-userAgent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 Edg/88.0.705.56
+#userAgent=Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 Edg/88.0.705.56,Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0
 host=www.szlib.org.cn
-referer=https://www.szlib.org.cn/page/newbook.html,https://www.szlib.org.cn/MyLibrary/newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&library=044005&local=2Z
+referer=https://szlib.org.cn/,https://www.szlib.org.cn/MyLibrary/newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&library=044005&local=2Z
 connection=keep-alive
-accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
-accept-json=application/json, text/javascript, */*
+accept=text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+accept-json=application/json, text/javascript, */*; q=0.01
 x_requested_with=XMLHttpRequest
 
 #代理

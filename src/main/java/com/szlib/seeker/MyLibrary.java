@@ -39,7 +39,7 @@ public class MyLibrary {
 		
 		String[] referers = header.getStrings("referer");
 		String referer = referers[0];
-		String connection = header.getStr("keep-alive");
+		String connection = header.getStr("connection");
 		String accept = header.getStr("accept");
 
 		Setting proxySetting = setting.getSetting("proxy");

@@ -31,15 +31,17 @@ public class MyLibrary2 {
 	public static void main(String[] args) {
 		Objects.requireNonNull(setting, "配置不能为空");
 		Setting header = setting.getSetting("header");
-		
-		String userAgent = header.getStrings("userAgent")[RandomUtil.randomInt(0, 1)];
+		List<String> uas = new ArrayList<>();
+		uas.add("Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 Edg/88.0.705.56");
+		uas.add("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0");
+		String userAgent = uas.get(RandomUtil.randomInt(0, 1));
 //		String baseUrl = setting.getStr("baseUrl");
 		String url = setting.getStr("initUrl");
 		String host = header.getStr("host");
 		
 		String[] referers = header.getStrings("referer");
 		String referer = referers[0];
-		String connection = header.getStr("keep-alive");
+		String connection = header.getStr("connection");
 		String accept = header.getStr("accept");
 
 		Setting proxySetting = setting.getSetting("proxy");
@@ -54,7 +56,7 @@ public class MyLibrary2 {
 		String result = buildRequest(url,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
 				.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
 				.execute().body();
-
+//		System.out.println(result);
 		String ajaxUrl = setting.getStr("ajaxUrl");
 		referer = referers[1];
 		long current = DateUtil.current();
@@ -64,9 +66,19 @@ public class MyLibrary2 {
 		accept = header.getStr("accept-json");
 		String x_requested_with = header.getStr("x_requested_with");
 		
-		result = buildRequest(ajaxUrl_format,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
-				.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
-				.header("X-Requested-With", x_requested_with).execute().body();
+		result = buildRequest(ajaxUrl_format,proxy)
+				.header(Header.USER_AGENT, userAgent)
+				.header(Header.HOST, host)
+				.header(Header.REFERER, referer)
+				.header(Header.ACCEPT, accept)
+				.header(Header.CONNECTION, connection)
+				.header("Cache-Control","max-age=0")
+//				.header("X-Requested-With", x_requested_with)
+				.header("Accept-Encoding","gzip, deflate, br")
+				.header("Sec-Fetch-Dest","document")
+				.header("Sec-Fetch-Mode","navigate")
+				.header("Sec-Fetch-Site","none")
+				.execute().body();
 		 System.out.println(result);
 
 		JSONObject resultJson = JSONUtil.parseObj(result);
@@ -74,20 +86,30 @@ public class MyLibrary2 {
 		int totalPage = PageUtil.totalPage(totalno, 10);
 		
 		JSONArray resultArray = resultJson.getJSONArray("result");
-//		List<NewBook> newBooks = json2NewBook(resultArray);
+		List<NewBook> newBooks = json2NewBook(resultArray);
 
 		int currentYear = DateUtil.thisYear();
-		int randomStart = RandomUtil.randomInt(1000, currentYear-432);
+		int randomStart = RandomUtil.randomInt(1234, currentYear-321);
 		for (int i = 2; i < totalPage; i++) {
 //			current = DateUtil.current(false);
 			current = DateUtil.current();
 			ajaxUrl_format = StrUtil.format(ajaxUrl, i, current);
-			result = buildRequest(ajaxUrl_format,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
-					.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
-					.header("X-Requested-With", x_requested_with).execute().body();
+			result = buildRequest(ajaxUrl_format,proxy)
+					.header(Header.USER_AGENT, userAgent)
+					.header(Header.HOST, host)
+					.header(Header.REFERER, referer)
+					.header(Header.ACCEPT, accept)
+					.header(Header.CONNECTION, connection)
+					.header("Cache-Control","max-age=0")
+//					.header("X-Requested-With", x_requested_with)
+					.header("Accept-Encoding","gzip, deflate, br")
+					.header("Sec-Fetch-Dest","document")
+					.header("Sec-Fetch-Mode","navigate")
+					.header("Sec-Fetch-Site","none")
+					.execute().body();
 			resultJson = JSONUtil.parseObj(result);
 			resultArray = resultJson.getJSONArray("result");
-//			newBooks.addAll(json2NewBook(resultArray));
+			newBooks.addAll(json2NewBook(resultArray));
 			ThreadUtil.safeSleep(RandomUtil.randomInt(randomStart, currentYear));
 		}
 		Comparator<NewBook> comparator = (b1, b2) -> b1.getPublisher_time().compareTo(b2.getPublisher_time());
@@ -133,7 +155,73 @@ public class MyLibrary2 {
 		if(proxy!=null) {
 			httpRequest = httpRequest.setProxy(proxy);
 		}
+		System.out.println(url);
 		return httpRequest;
+	}
+	
+	private static List<NewBook> json2NewBook(JSONArray resultArray){
+		List<NewBook> newBooks = new ArrayList<NewBook>();
+		String format = "yyyy.MM";
+//		String checkUrl = setting.getStr("checkUrl");
+//		String readerAccessUrl = setting.getStr("readerAccessUrl");
+//		String addExpressUrl = setting.getStr("addExpressUrl");
+		
+		char[] slash = new char[] { '/' };
+		char[]  brackets = new char[] { '[', ']' };
+		for (int i = 0, size = resultArray.size(); i < size; i++) {
+			JSONObject book = resultArray.getJSONObject(i);
+			NewBook newBook = new NewBook();
+			String title = book.getStr("title");
+			String author = book.getStr("author");
+			String publisher = book.getStr("publisher");
+			String[] publisher_spilt = StrUtil.split(publisher, ",");
+			String abstract_ = book.getStr("abstract");
+			String isbn = book.getStr("isbn");
+			String price = book.getStr("price");
+
+			String biblisomtableid = book.getStr("biblisomtableid");
+			String biblisommetaid = book.getStr("biblisommetaid");
+			String ordcatamid = book.getStr("ordcatamid");
+
+			newBook.setTitle(title);
+			newBook.setAuthor(author);
+			newBook.setAbstract_self(abstract_);
+			newBook.setIsbn(isbn);
+			newBook.setPublisher_name(publisher_spilt[0]);
+			newBook.setPublisher_date(publisher_spilt[1]);
+			DateTime pdate = null;
+			String publisher_spilt_1 = null;
+			try {
+				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], slash, ".");
+				pdate = DateUtil.parse(publisher_spilt[1], format);
+			} catch (Exception e) {
+//				 log.error(publisher_spilt[1],e);
+//				System.err.println(publisher_spilt[1]);
+				e.printStackTrace();
+				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], brackets, "");
+				pdate = DateUtil.parse(publisher_spilt_1, "yyyy");
+			}
+
+			newBook.setPublisher_time(pdate);
+			newBook.setPrice(price);
+
+			newBook.setBiblisomtableid(biblisomtableid);
+			newBook.setBiblisommetaid(biblisommetaid);
+			newBook.setOrdcatamid(ordcatamid);
+
+			// 我优先关注出版年份晚于2017的
+//			if (DateUtil.year(pdate) >= 2018 && DateUtil.month(pdate) > 5) {
+//				String checkUrl_format = StrUtil.format(checkUrl, biblisomtableid, biblisommetaid, ordcatamid);
+//				String readerAccessUrl_format = StrUtil.format(readerAccessUrl, biblisomtableid, biblisommetaid,
+//						ordcatamid);
+//				newBook.setCheckUrl(checkUrl_format);
+//				newBook.setReaderAccessUrl(readerAccessUrl_format);
+//				newBook.setAddExpressUrl(addExpressUrl);
+//			}
+
+			newBooks.add(newBook);
+		}
+		return newBooks;
 	}
 
 //	private static List<NewBook> json2NewBook(JSONArray resultArray) {
