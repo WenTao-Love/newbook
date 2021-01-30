@@ -1,5 +1,6 @@
 package com.szlib.seeker;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -23,12 +24,27 @@ import cn.hutool.json.JSONUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import cn.hutool.setting.Setting;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MyLibrary2 {
 	private static final Log log = LogFactory.get();
 	private static Setting setting = new Setting("project2.setting", true);
 	
-	public static void main(String[] args) {
+	private static final OkHttpClient client = new OkHttpClient();
+
+	private static String run(String url,String ua) throws IOException {
+		Request request = new Request.Builder()
+				.addHeader("User-Agent",ua)
+				.url(url).build();
+
+		try (Response response = client.newCall(request).execute()) {
+			return response.body().string();
+		}
+	}
+	
+	public static void main(String[] args) throws IOException {
 		Objects.requireNonNull(setting, "配置不能为空");
 		Setting header = setting.getSetting("header");
 		List<String> uas = new ArrayList<>();
@@ -53,10 +69,11 @@ public class MyLibrary2 {
 			proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
 		}
 
-		String result = buildRequest(url,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
-				.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
-				.execute().body();
+//		String result = buildRequest(url,proxy).header(Header.USER_AGENT, userAgent).header(Header.HOST, host)
+//				.header(Header.REFERER, referer).header(Header.ACCEPT, accept).header(Header.CONNECTION, connection)
+//				.execute().body();
 //		System.out.println(result);
+		String result = run(url,userAgent);
 		String ajaxUrl = setting.getStr("ajaxUrl");
 		referer = referers[1];
 		long current = DateUtil.current();
@@ -66,19 +83,20 @@ public class MyLibrary2 {
 		accept = header.getStr("accept-json");
 		String x_requested_with = header.getStr("x_requested_with");
 		
-		result = buildRequest(ajaxUrl_format,proxy)
-				.header(Header.USER_AGENT, userAgent)
-				.header(Header.HOST, host)
-				.header(Header.REFERER, referer)
-				.header(Header.ACCEPT, accept)
-				.header(Header.CONNECTION, connection)
-				.header("Cache-Control","max-age=0")
-//				.header("X-Requested-With", x_requested_with)
-				.header("Accept-Encoding","gzip, deflate, br")
-				.header("Sec-Fetch-Dest","document")
-				.header("Sec-Fetch-Mode","navigate")
-				.header("Sec-Fetch-Site","none")
-				.execute().body();
+//		result = buildRequest(ajaxUrl_format,proxy)
+//				.header(Header.USER_AGENT, userAgent)
+//				.header(Header.HOST, host)
+//				.header(Header.REFERER, referer)
+//				.header(Header.ACCEPT, accept)
+//				.header(Header.CONNECTION, connection)
+//				.header("Cache-Control","max-age=0")
+////				.header("X-Requested-With", x_requested_with)
+//				.header("Accept-Encoding","gzip, deflate, br")
+//				.header("Sec-Fetch-Dest","document")
+//				.header("Sec-Fetch-Mode","navigate")
+//				.header("Sec-Fetch-Site","none")
+//				.execute().body();
+		result = run(ajaxUrl_format,userAgent);
 		 System.out.println(result);
 
 		JSONObject resultJson = JSONUtil.parseObj(result);
@@ -91,22 +109,24 @@ public class MyLibrary2 {
 		int currentYear = DateUtil.thisYear();
 		int randomStart = RandomUtil.randomInt(1234, currentYear-321);
 		for (int i = 2; i < totalPage; i++) {
+			System.out.println(i);
 //			current = DateUtil.current(false);
 			current = DateUtil.current();
 			ajaxUrl_format = StrUtil.format(ajaxUrl, i, current);
-			result = buildRequest(ajaxUrl_format,proxy)
-					.header(Header.USER_AGENT, userAgent)
-					.header(Header.HOST, host)
-					.header(Header.REFERER, referer)
-					.header(Header.ACCEPT, accept)
-					.header(Header.CONNECTION, connection)
-					.header("Cache-Control","max-age=0")
-//					.header("X-Requested-With", x_requested_with)
-					.header("Accept-Encoding","gzip, deflate, br")
-					.header("Sec-Fetch-Dest","document")
-					.header("Sec-Fetch-Mode","navigate")
-					.header("Sec-Fetch-Site","none")
-					.execute().body();
+//			result = buildRequest(ajaxUrl_format,proxy)
+//					.header(Header.USER_AGENT, userAgent)
+//					.header(Header.HOST, host)
+//					.header(Header.REFERER, referer)
+//					.header(Header.ACCEPT, accept)
+//					.header(Header.CONNECTION, connection)
+//					.header("Cache-Control","max-age=0")
+////					.header("X-Requested-With", x_requested_with)
+//					.header("Accept-Encoding","gzip, deflate, br")
+//					.header("Sec-Fetch-Dest","document")
+//					.header("Sec-Fetch-Mode","navigate")
+//					.header("Sec-Fetch-Site","none")
+//					.execute().body();
+			result = run(ajaxUrl_format,userAgent);
 			resultJson = JSONUtil.parseObj(result);
 			resultArray = resultJson.getJSONArray("result");
 			newBooks.addAll(json2NewBook(resultArray));
@@ -130,8 +150,8 @@ public class MyLibrary2 {
 			lines.add("出版者:" + o.getPublisher_name());
 			lines.add("出版年:" + o.getPublisher_date());
 			lines.add("简介:" + o.getAbstract_self());
-			lines.add("能否可借:" + o.getCheckUrl());
-			lines.add("读者自取:" + o.getReaderAccessUrl());
+//			lines.add("能否可借:" + o.getCheckUrl());
+//			lines.add("读者自取:" + o.getReaderAccessUrl());
 			lines.add("\n");
 			writer.appendLines(lines);
 		});
@@ -166,7 +186,7 @@ public class MyLibrary2 {
 //		String readerAccessUrl = setting.getStr("readerAccessUrl");
 //		String addExpressUrl = setting.getStr("addExpressUrl");
 		
-		char[] slash = new char[] { '/' };
+		char[] slash = new char[] { '/','-' };
 		char[]  brackets = new char[] { '[', ']' };
 		for (int i = 0, size = resultArray.size(); i < size; i++) {
 			JSONObject book = resultArray.getJSONObject(i);
@@ -192,8 +212,14 @@ public class MyLibrary2 {
 			DateTime pdate = null;
 			String publisher_spilt_1 = null;
 			try {
-				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], slash, ".");
-				pdate = DateUtil.parse(publisher_spilt[1], format);
+				System.out.println(publisher_spilt[1]);
+				if(StrUtil.isBlankOrUndefined(publisher_spilt[1])) {
+					pdate = DateUtil.parse("1989.09", format);
+				}else {
+					publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], slash, ".");
+//					System.out.println(publisher_spilt_1);
+					pdate = DateUtil.parse(publisher_spilt_1, format);
+				}
 			} catch (Exception e) {
 //				 log.error(publisher_spilt[1],e);
 //				System.err.println(publisher_spilt[1]);

@@ -170,7 +170,7 @@ public class MyLibrary {
 			String publisher_spilt_1 = null;
 			try {
 				publisher_spilt_1 = StrUtil.replaceChars(publisher_spilt[1], slash, ".");
-				pdate = DateUtil.parse(publisher_spilt[1], format);
+				pdate = DateUtil.parse(publisher_spilt_1, format);
 			} catch (Exception e) {
 //				 log.error(publisher_spilt[1],e);
 //				System.err.println(publisher_spilt[1]);

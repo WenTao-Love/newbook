@@ -1,7 +1,8 @@
 baseUrl=https://www.szlib.org.cn/MyLibrary/
 initUrl=${baseUrl}newbook.jsp?catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&library=044005&local=2Z
-ajaxUrl=${baseUrl}proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&v_index=&v_value=&flag=true&library=044005&local=2Z&catname=深图新书选购目录&_={}
-#ajaxUrl=${baseUrl}proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&v_index=&v_value=&flag=true&library=044005&local=2Z&catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&_={}
+#ajaxUrl=${baseUrl}proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&v_index=&v_value=&flag=true&library=044005&local=2Z&catname=深图新书选购目录&_={}
+
+ajaxUrl=${baseUrl}proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&v_index=&v_value=&flag=true&library=044005&local=2Z&catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&_={}
 
 #ajaxUrl=${baseUrl}proxyBasic.jsp?requestmanage/getNBbyIndex?pageIndex={}&pageSize=10&library=044005&local=2Z&catname=%E6%B7%B1%E5%9B%BE%E6%96%B0%E4%B9%A6%E9%80%89%E8%B4%AD%E7%9B%AE%E5%BD%95&_={}
 #检查是否可借
