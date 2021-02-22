@@ -107,7 +107,7 @@ public class MyLibrary2 {
 		List<NewBook> newBooks = json2NewBook(resultArray);
 
 		int currentYear = DateUtil.thisYear();
-		int randomStart = RandomUtil.randomInt(1234, currentYear-321);
+		int randomStart = RandomUtil.randomInt(currentYear, RandomUtil.randomInt(currentYear+2,currentYear+38));
 		for (int i = 2; i < totalPage; i++) {
 			System.out.println(i);
 //			current = DateUtil.current(false);
@@ -130,7 +130,7 @@ public class MyLibrary2 {
 			resultJson = JSONUtil.parseObj(result);
 			resultArray = resultJson.getJSONArray("result");
 			newBooks.addAll(json2NewBook(resultArray));
-			ThreadUtil.safeSleep(RandomUtil.randomInt(randomStart, currentYear));
+			ThreadUtil.safeSleep(RandomUtil.randomInt(currentYear, randomStart));
 		}
 		Comparator<NewBook> comparator = (b1, b2) -> b1.getPublisher_time().compareTo(b2.getPublisher_time());
 		newBooks.sort(comparator.reversed());
