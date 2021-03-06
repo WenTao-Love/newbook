@@ -108,30 +108,39 @@ public class MyLibrary2 {
 
 		int currentYear = DateUtil.thisYear();
 		int randomStart = RandomUtil.randomInt(currentYear, RandomUtil.randomInt(currentYear+2,currentYear+38));
-		for (int i = 2; i < totalPage; i++) {
-			System.out.println(i);
-//			current = DateUtil.current(false);
-			current = DateUtil.current();
-			ajaxUrl_format = StrUtil.format(ajaxUrl, i, current);
-//			result = buildRequest(ajaxUrl_format,proxy)
-//					.header(Header.USER_AGENT, userAgent)
-//					.header(Header.HOST, host)
-//					.header(Header.REFERER, referer)
-//					.header(Header.ACCEPT, accept)
-//					.header(Header.CONNECTION, connection)
-//					.header("Cache-Control","max-age=0")
-////					.header("X-Requested-With", x_requested_with)
-//					.header("Accept-Encoding","gzip, deflate, br")
-//					.header("Sec-Fetch-Dest","document")
-//					.header("Sec-Fetch-Mode","navigate")
-//					.header("Sec-Fetch-Site","none")
-//					.execute().body();
-			result = run(ajaxUrl_format,userAgent);
-			resultJson = JSONUtil.parseObj(result);
-			resultArray = resultJson.getJSONArray("result");
-			newBooks.addAll(json2NewBook(resultArray));
-			ThreadUtil.safeSleep(RandomUtil.randomInt(currentYear, randomStart));
+		if(currentYear - randomStart > -1) {
+			System.out.println("currentYear:"+currentYear+",randomStart:"+randomStart);
+			randomStart = randomStart + RandomUtil.randomInt(1, currentYear);
 		}
+		try {
+			for (int i = 2; i < totalPage; i++) {
+				System.out.println(i);
+//				current = DateUtil.current(false);
+				current = DateUtil.current();
+				ajaxUrl_format = StrUtil.format(ajaxUrl, i, current);
+//				result = buildRequest(ajaxUrl_format,proxy)
+//						.header(Header.USER_AGENT, userAgent)
+//						.header(Header.HOST, host)
+//						.header(Header.REFERER, referer)
+//						.header(Header.ACCEPT, accept)
+//						.header(Header.CONNECTION, connection)
+//						.header("Cache-Control","max-age=0")
+////						.header("X-Requested-With", x_requested_with)
+//						.header("Accept-Encoding","gzip, deflate, br")
+//						.header("Sec-Fetch-Dest","document")
+//						.header("Sec-Fetch-Mode","navigate")
+//						.header("Sec-Fetch-Site","none")
+//						.execute().body();
+				result = run(ajaxUrl_format,userAgent);
+				resultJson = JSONUtil.parseObj(result);
+				resultArray = resultJson.getJSONArray("result");
+				newBooks.addAll(json2NewBook(resultArray));
+				ThreadUtil.safeSleep(RandomUtil.randomInt(currentYear, randomStart));
+			}
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		Comparator<NewBook> comparator = (b1, b2) -> b1.getPublisher_time().compareTo(b2.getPublisher_time());
 		newBooks.sort(comparator.reversed());
 		String today = DateUtil.today();
