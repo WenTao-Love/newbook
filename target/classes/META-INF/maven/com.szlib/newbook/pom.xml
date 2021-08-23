@@ -14,7 +14,7 @@
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>  
 		<hutool.version>5.6.4</hutool.version>
 		<dubbo.version>2.6.9</dubbo.version>
-		<jsoup.version>1.13.1</jsoup.version>
+		<jsoup.version>1.14.2</jsoup.version>
 		<spring.version>5.3.3.RELEASE</spring.version>
 		<curator-client.version>5.1.0</curator-client.version>
 		<drools.version>7.48.0.Final</drools.version>
